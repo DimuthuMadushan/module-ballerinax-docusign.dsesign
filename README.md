@@ -44,7 +44,7 @@ In order to use the DocuSign eSignature connector, you need to first create the 
 3. **Get the authorization code**: Visit the following URL in your web browser, replacing `{iKey}` with your Integration Key and `{redirectUri}` with your redirect URI.
 
     ```url
-    https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature%20impersonation&client_id={iKey}&redirect_uri={redirectUri}
+    https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature%20impersonation%20extended&client_id={iKey}&redirect_uri={redirectUri}
     ```
 
     This will redirect you to your Redirect URI with a `code` query parameter. This is your `authorization code`.

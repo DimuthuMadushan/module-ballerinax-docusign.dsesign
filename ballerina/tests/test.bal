@@ -55,10 +55,10 @@ function initClient() returns error? {
 
 // A draft envelope with one signer and one inline document, used as the fixture for every
 // envelope-scoped test. Each test creates its own, so none depends on execution order.
-function createDraftEnvelope() returns string|error {
+function createDraftEnvelope(string status = "created") returns string|error {
     EnvelopeSummary summary = check docusign->createEnvelope(accountId, {
         emailSubject: "Ballerina connector test envelope",
-        status: "created",
+        status,
         documents: [
             {
                 documentId: "1",
@@ -243,7 +243,8 @@ function testCreateEnvelopeSenderView() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 function testCreateEnvelopeRecipientView() returns error? {
-    string envelopeId = check createDraftEnvelope();
+    // A recipient signing view can only be created for a sent envelope.
+    string envelopeId = check createDraftEnvelope("sent");
     EnvelopeViews view = check docusign->createEnvelopeRecipientView(accountId, envelopeId, {
         returnUrl: "https://www.example.com/docusign/return",
         authenticationMethod: "none",
