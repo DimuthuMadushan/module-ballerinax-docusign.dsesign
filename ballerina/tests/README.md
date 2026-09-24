@@ -10,7 +10,7 @@ Every envelope-scoped test creates its own draft envelope, and each delete test 
 bal test
 ```
 
-The test suite uses a mock server (`tests/mock_service.bal`) that intercepts HTTP calls so no real credentials are required.
+The test suite uses a mock server (`tests/mock_service.bal`, port 9090) that intercepts the API calls, and a mock security token service (`tests/sts_mock_service.bal`, port 9444) that answers the OAuth 2.0 refresh-token grant, so no real credentials are required.
 
 To run the same tests against the DocuSign developer (demo) environment, set the following environment variables and run `bal test --groups live_tests`.
 

@@ -24,11 +24,14 @@ final string accountId = isLiveServer ? os:getEnv("DOCUSIGN_ACCOUNT_ID") : "2b6f
 final string userId = isLiveServer ? os:getEnv("DOCUSIGN_USER_ID") : "4c9a1c2e-8f0b-4e5a-9d1c-7a6b2f3e1d01";
 final string templateId = isLiveServer ? os:getEnv("DOCUSIGN_TEMPLATE_ID") : "d4e5f6a7-b8c9-4d0e-9f1a-2b3c4d5e6f70";
 
-final Client docusign = check initClient();
+// Created in @BeforeSuite rather than at module init: the OAuth 2.0 refresh-token grant fetches
+// a token when the client is constructed, and the mock STS listener is only up once tests start.
+Client docusign = test:mock(Client);
 
-isolated function initClient() returns Client|error {
+@test:BeforeSuite
+function initClient() returns error? {
     if isLiveServer {
-        return new ({
+        docusign = check new ({
             auth: {
                 clientId: os:getEnv("DOCUSIGN_CLIENT_ID"),
                 clientSecret: os:getEnv("DOCUSIGN_CLIENT_SECRET"),
@@ -36,13 +39,23 @@ isolated function initClient() returns Client|error {
                 refreshUrl: "https://account-d.docusign.com/oauth/token"
             }
         }, serviceUrl);
+        return;
     }
-    return new ({auth: {token: "test_token"}}, serviceUrl);
+    // Mock mode exercises the OAuth 2.0 refresh-token grant against the mock STS in
+    // sts_mock_service.bal, as the live client does against DocuSign's account server.
+    docusign = check new ({
+        auth: {
+            clientId: "mock-client-id",
+            clientSecret: "mock-client-secret",
+            refreshToken: "mock-refresh-token",
+            refreshUrl: "http://localhost:9444/oauth2/token"
+        }
+    }, serviceUrl);
 }
 
 // A draft envelope with one signer and one inline document, used as the fixture for every
 // envelope-scoped test. Each test creates its own, so none depends on execution order.
-isolated function createDraftEnvelope() returns string|error {
+function createDraftEnvelope() returns string|error {
     EnvelopeSummary summary = check docusign->createEnvelope(accountId, {
         emailSubject: "Ballerina connector test envelope",
         status: "created",

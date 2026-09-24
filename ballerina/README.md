@@ -133,10 +133,3 @@ The DocuSign eSignature connector provides practical examples illustrating usage
 
 1. [Send documents for esignatures](https://github.com/ballerina-platform/module-ballerinax-docusign.dsesign/tree/main/examples/send-documents-for-esignatures) - Send an envelope with a document to a recipient to add their eSignature, then list the envelope's documents.
 2. [Create digital signatures](https://github.com/ballerina-platform/module-ballerinax-docusign.dsesign/tree/main/examples/create-digital-signatures) - Add a signature image for a DocuSign user, then list the user's signatures and read one back.
-
-## Useful links
-
-* For more information go to the [`docusign.dsesign` package](https://central.ballerina.io/ballerinax/docusign.dsesign/latest).
-* For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
-* Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
-* Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.
